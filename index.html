@@ -4,57 +4,106 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora IPID</title>
-    <link rel="manifest" href="manifest.json">
     <style>
         body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
         select, button { margin: 10px; padding: 10px; font-size: 16px; }
         #resultado { font-size: 18px; font-weight: bold; margin-top: 20px; }
+        .descripcion { font-size: 14px; color: #555; margin-top: 5px; }
     </style>
 </head>
 <body>
     <h2>Calculadora de Índice Predictivo de Intubación Difícil (IPID)</h2>
+
     <label>Mallampati:</label>
-    <select id="mallampati">
+    <select id="mallampati" onchange="mostrarDescripcion('mallampati')">
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
         <option value="4">4</option>
     </select>
+    <div id="descripcion-mallampati" class="descripcion"></div>
     <br>
+
     <label>Patil-Aldreti:</label>
-    <select id="patil">
+    <select id="patil" onchange="mostrarDescripcion('patil')">
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
     </select>
+    <div id="descripcion-patil" class="descripcion"></div>
     <br>
+
     <label>Distancia esternomentoniana:</label>
-    <select id="esternomentoniana">
+    <select id="esternomentoniana" onchange="mostrarDescripcion('esternomentoniana')">
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
         <option value="4">4</option>
     </select>
+    <div id="descripcion-esternomentoniana" class="descripcion"></div>
     <br>
+
     <label>Distancia interincisivos:</label>
-    <select id="interincisivos">
+    <select id="interincisivos" onchange="mostrarDescripcion('interincisivos')">
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
         <option value="4">4</option>
     </select>
+    <div id="descripcion-interincisivos" class="descripcion"></div>
     <br>
+
     <label>Protrusión mandibular:</label>
-    <select id="protrusion">
+    <select id="protrusion" onchange="mostrarDescripcion('protrusion')">
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
     </select>
+    <div id="descripcion-protrusion" class="descripcion"></div>
     <br>
+
     <button onclick="calcularIPID()">Calcular</button>
     <div id="resultado"></div>
 
     <script>
+        // Descripciones para cada escala
+        const descripciones = {
+            mallampati: {
+                1: "Clase 1: visibilidad del paladar blando, úvula y pilares amigdalinos.",
+                2: "Clase 2: visibilidad de paladar blando y úvula.",
+                3: "Clase 3: visibilidad del paladar blando y base de la úvula.",
+                4: "Clase 4: imposibilidad para ver paladar blando."
+            },
+            patil: {
+                1: "Clase 1: > 6.5 cm (laringoscopía e intubación sin dificultad).",
+                2: "Clase 2: 6 a 6.5 cm (laringoscopía con cierta dificultad).",
+                3: "Clase 3: < 6 cm (laringoscopía e intubación muy difíciles)."
+            },
+            esternomentoniana: {
+                1: "Clase 1: > 13 cm.",
+                2: "Clase 2: 12-13 cm.",
+                3: "Clase 3: 11-12 cm.",
+                4: "Clase 4: < 11 cm."
+            },
+            interincisivos: {
+                1: "Clase 1: > 3 cm.",
+                2: "Clase 2: de 2.6 a 3 cm.",
+                3: "Clase 3: de 2 a 2.5 cm.",
+                4: "Clase 4: < 2 cm."
+            },
+            protrusion: {
+                1: "Clase 1: los incisivos inferiores se pueden colocar por delante de los superiores.",
+                2: "Clase 2: los incisivos inferiores se quedan a la altura de los superiores.",
+                3: "Clase 3: los incisivos inferiores quedan por detrás de los superiores."
+            }
+        };
+
+        // Función para mostrar la descripción correspondiente
+        function mostrarDescripcion(escala) {
+            const valor = document.getElementById(escala).value;
+            document.getElementById(`descripcion-${escala}`).innerText = descripciones[escala][valor];
+        }
+
         function calcularIPID() {
             let mallampati = parseInt(document.getElementById('mallampati').value);
             let patil = parseInt(document.getElementById('patil').value);
@@ -74,18 +123,5 @@
             document.getElementById('resultado').innerHTML = `Puntaje IPID: ${total} - ${clasificacion}`;
         }
     </script>
-
-    <script>
-        // Registro del Service Worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/sw.js').then(function(registration) {
-                    console.log('Service Worker registrado con éxito:', registration);
-                }).catch(function(error) {
-                    console.log('Error al registrar el Service Worker:', error);
-                });
-            });
-        }
-    </script>
 </body>
-</html>
+</html>    
