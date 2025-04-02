@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora IPID</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        select, button { margin: 10px; padding: 10px; font-size: 16px; }
+        #resultado { font-size: 18px; font-weight: bold; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h2>Calculadora de Índice Predictivo de Intubación Difícil (IPID)</h2>
+    <label>Mallampati:</label>
+    <select id="mallampati">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+    </select>
+    <br>
+    <label>Patil-Aldreti:</label>
+    <select id="patil">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+    </select>
+    <br>
+    <label>Distancia esternomentoniana:</label>
+    <select id="esternomentoniana">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+    </select>
+    <br>
+    <label>Distancia interincisivos:</label>
+    <select id="interincisivos">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+    </select>
+    <br>
+    <label>Protrusión mandibular:</label>
+    <select id="protrusion">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+    </select>
+    <br>
+    <button onclick="calcularIPID()">Calcular</button>
+    <div id="resultado"></div>
+
+    <script>
+        function calcularIPID() {
+            let mallampati = parseInt(document.getElementById('mallampati').value);
+            let patil = parseInt(document.getElementById('patil').value);
+            let esternomentoniana = parseInt(document.getElementById('esternomentoniana').value);
+            let interincisivos = parseInt(document.getElementById('interincisivos').value);
+            let protrusion = parseInt(document.getElementById('protrusion').value);
+
+            let total = mallampati + patil + esternomentoniana + interincisivos + protrusion;
+            let clasificacion = "";
+
+            if (total >= 5 && total <= 7) clasificacion = "Intubación fácil";
+            else if (total >= 8 && total <= 10) clasificacion = "Dificultad discreta";
+            else if (total >= 11 && total <= 13) clasificacion = "Franca dificultad";
+            else if (total >= 14 && total <= 16) clasificacion = "Gran dificultad";
+            else if (total >= 17 && total <= 18) clasificacion = "Intubación difícil";
+            
+            document.getElementById('resultado').innerHTML = `Puntaje IPID: ${total} - ${clasificacion}`;
+        }
+    </script>
+
+    <script>
+        // Registro del Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js').then(function(registration) {
+                    console.log('Service Worker registrado con éxito:', registration);
+                }).catch(function(error) {
+                    console.log('Error al registrar el Service Worker:', error);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
